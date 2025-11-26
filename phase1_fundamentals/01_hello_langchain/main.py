@@ -25,6 +25,11 @@ from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 # 加载环境变量
 load_dotenv()
 
+
+
+NEXTCHAT_API_KEY = os.getenv("NEXTCHAT_API_KEY")
+NEXTCHAT_BASE_URL = os.getenv("NEXTCHAT_API_BASE")
+
 # 验证 API 密钥是否存在
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
@@ -299,9 +304,57 @@ def example_6_error_handling():
 
 
 # ============================================================================
-# 示例 7：多模型对比
+# 示例 7：使用代理配置
 # ============================================================================
-def example_7_multiple_models():
+def example_7_with_proxy():
+    """
+    示例7：使用代理配置模型
+    
+    两种常见的代理场景：
+    1. HTTP/HTTPS 网络代理（科学上网等）
+    2. API 代理服务（如 NextChat、CloudFlare Workers 等）
+    """
+    print("\n" + "="*70)
+    print("示例 7：使用代理配置")
+    print("="*70)
+
+    print("\n方式2：使用自定义 API 端点（API 代理服务）")
+    print("-" * 70)
+    
+    # 如果您使用的是 NextChat 或其他 OpenAI 兼容的代理服务
+    if NEXTCHAT_API_KEY and NEXTCHAT_API_KEY:
+        from langchain_openai import ChatOpenAI
+        
+        try:
+            # 配置代理服务
+            model = ChatOpenAI(
+                model="deepseek-r1",
+                api_key=NEXTCHAT_API_KEY,
+                openai_proxy=NEXTCHAT_BASE_URL,
+                temperature=0.7,
+                timeout=30,
+            )
+            
+            print("✓ 使用 NextChat API 代理配置成功")
+            print(f"  Base URL: {NEXTCHAT_BASE_URL}")
+            
+            # 调用模型
+            response = model.invoke("你好！")
+            print(f"  回复: {response}")
+            
+        except Exception as e:
+            print(f"✗ NextChat 代理配置失败: {e}")
+    else:
+        print("提示：未检测到 NEXTCHAT_API_KEY，跳过此示例")
+        print("如需使用，请在 .env 文件中添加：")
+        print("  NEXTCHAT_API_KEY=your_key_here")
+
+
+
+# ============================================================================
+# 示例 8：多模型对比
+# ============================================================================
+def example_8_multiple_models():
     """
     示例7：使用不同的模型
 
@@ -355,13 +408,14 @@ def main():
 
     try:
         # 运行所有示例
-        example_1_simple_invoke()
-        example_2_messages()
-        example_3_dict_messages()
-        example_4_model_parameters()
-        example_5_response_structure()
-        example_6_error_handling()
-        example_7_multiple_models()
+        example_7_with_proxy()
+        # example_2_messages()
+        # example_3_dict_messages()
+        # example_4_model_parameters()
+        # example_5_response_structure()
+        # example_6_error_handling()
+        # example_7_with_proxy()
+        # example_8_multiple_models()
 
         print("\n" + "="*70)
         print(" 所有示例运行完成！")
