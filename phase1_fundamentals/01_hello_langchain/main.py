@@ -15,8 +15,10 @@ LangChain 1.0 基础教程 - 第一个 LLM 调用
 
 import os
 from dotenv import load_dotenv
+from langchain.agents import create_agent
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
+from langchain_openai import ChatOpenAI
 
 # ============================================================================
 # 环境配置
@@ -32,26 +34,6 @@ NEXTCHAT_BASE_URL = os.getenv("NEXTCHAT_API_BASE")
 
 # 验证 API 密钥是否存在
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-if not GROQ_API_KEY:
-    raise ValueError(
-        "\n" + "="*70 + "\n"
-        "❌ 错误：未找到 GROQ_API_KEY 环境变量！\n"
-        "="*70 + "\n"
-        "请按照以下步骤设置 API 密钥：\n\n"
-        "1️⃣ 访问 https://console.groq.com/keys 获取免费 API 密钥\n"
-        "2️⃣ 复制 .env.example 为 .env\n"
-        "   命令：cp .env.example .env\n"
-        "3️⃣ 在 .env 文件中填入你的 Groq API Key：\n"
-        "   GROQ_API_KEY=gsk_your_actual_key_here\n"
-        "4️⃣ 重新运行程序\n"
-        "="*70
-    )
-
-# 验证 API 密钥格式（Groq API key 通常以 gsk_ 开头）
-if not GROQ_API_KEY.startswith("gsk_"):
-    print("\n" + "⚠️  警告：你的 GROQ_API_KEY 格式可能不正确")
-    print("   Groq API 密钥通常以 'gsk_' 开头")
-    print("   请确认你从 https://console.groq.com/keys 获取了正确的密钥\n")
 
 
 # ============================================================================
@@ -303,6 +285,7 @@ def example_6_error_handling():
         print(f"未知错误: {type(e).__name__}: {e}")
 
 
+
 # ============================================================================
 # 示例 7：使用代理配置
 # ============================================================================
@@ -320,34 +303,47 @@ def example_7_with_proxy():
 
     print("\n方式2：使用自定义 API 端点（API 代理服务）")
     print("-" * 70)
-    
+    def get_weather(city: str) -> str:
+        return f"this {city} city is sunny"
+
+
+
     # 如果您使用的是 NextChat 或其他 OpenAI 兼容的代理服务
     if NEXTCHAT_API_KEY and NEXTCHAT_API_KEY:
-        from langchain_openai import ChatOpenAI
-        
-        try:
-            # 配置代理服务
-            model = ChatOpenAI(
-                model="deepseek-r1",
-                api_key=NEXTCHAT_API_KEY,
-                openai_proxy=NEXTCHAT_BASE_URL,
-                temperature=0.7,
-                timeout=30,
-            )
-            
-            print("✓ 使用 NextChat API 代理配置成功")
-            print(f"  Base URL: {NEXTCHAT_BASE_URL}")
-            
-            # 调用模型
-            response = model.invoke("你好！")
-            print(f"  回复: {response}")
-            
-        except Exception as e:
-            print(f"✗ NextChat 代理配置失败: {e}")
-    else:
-        print("提示：未检测到 NEXTCHAT_API_KEY，跳过此示例")
-        print("如需使用，请在 .env 文件中添加：")
-        print("  NEXTCHAT_API_KEY=your_key_here")
+
+        model = ChatOpenAI(
+            model = "kimi-k2-turbo-preview",
+            api_key = NEXTCHAT_API_KEY,
+            base_url= NEXTCHAT_BASE_URL,
+            temperature=0.1,
+            max_tokens=1000,
+            timeout=30
+        )
+
+        agent = create_agent(model)
+
+
+        messages = [
+            {"role": "system", "content": "你是一个友好的助手"},
+            {"role": "user", "content": "我叫小明"}
+        ]
+
+        response = agent.invoke(
+            {"messages": messages}
+        )
+
+        print(f"回复: {response['messages'][-1].content}")
+        messages.append({"role":"assistant", "content": response['messages'][-1].content})
+        messages.append({"role":"user", "content": "我刚刚说我叫什么"})
+
+        response = agent.invoke(
+            {"messages": messages}
+        )
+        print(f"问题: {messages[-1]['content']}")
+        print(f"回复: {response['messages'][-1].content}")
+
+
+
 
 
 
