@@ -54,7 +54,7 @@ def example_1_simple_invoke():
     # 初始化模型
     # 格式：init_chat_model("提供商:模型名称")
     model = init_chat_model(
-        "groq:llama-3.3-70b-versatile",  # Groq 提供的 Llama 3.3 模型
+        "qwen-turbo",  # Groq 提供的 Llama 3.3 模型
         api_key=GROQ_API_KEY
     )
 
@@ -404,7 +404,8 @@ def main():
 
     try:
         # 运行所有示例
-        example_7_with_proxy()
+        example_1_simple_invoke()
+        # example_7_with_proxy()
         # example_2_messages()
         # example_3_dict_messages()
         # example_4_model_parameters()
@@ -413,13 +414,13 @@ def main():
         # example_7_with_proxy()
         # example_8_multiple_models()
 
-        print("\n" + "="*70)
-        print(" 所有示例运行完成！")
-        print("="*70)
-        print("\n下一步学习:")
-        print("  - 02_prompt_templates: 学习如何使用提示词模板")
-        print("  - 03_messages: 深入理解消息类型")
-        print("  - 04_custom_tools: 创建自定义工具")
+        # print("\n" + "="*70)
+        # print(" 所有示例运行完成！")
+        # print("="*70)
+        # print("\n下一步学习:")
+        # print("  - 02_prompt_templates: 学习如何使用提示词模板")
+        # print("  - 03_messages: 深入理解消息类型")
+        # print("  - 04_custom_tools: 创建自定义工具")
 
     except Exception as e:
         print(f"\n运行出错: {e}")
