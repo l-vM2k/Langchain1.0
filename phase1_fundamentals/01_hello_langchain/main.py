@@ -58,6 +58,8 @@ def example_1_simple_invoke():
         api_key=GROQ_API_KEY
     )
 
+    #测试github
+
     # 使用字符串直接调用模型
     response = model.invoke("你好！请用一句话介绍什么是人工智能。")
 
