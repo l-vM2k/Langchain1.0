@@ -12,19 +12,22 @@ LangChain 1.0 - Validation & Retry (验证和重试)
 
 import os
 from dotenv import load_dotenv
-from langchain.chat_models import init_chat_model
+from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field, field_validator, ValidationError
 from typing import Optional, List
 from enum import Enum
 import time
 
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-if not GROQ_API_KEY or GROQ_API_KEY == "your_groq_api_key_here_replace_this":
-    raise ValueError("请先设置 GROQ_API_KEY")
+if not os.getenv("DASHSCOPE_API_KEY"):
+    raise ValueError("请先设置 DASHSCOPE_API_KEY 和 BASE_URL")
 
-model = init_chat_model("groq:llama-3.3-70b-versatile", api_key=GROQ_API_KEY)
+model = ChatOpenAI(
+    model="qwen-turbo",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url=os.getenv("BASE_URL"),
+)
 
 
 # ============================================================================
@@ -82,8 +85,12 @@ def example_2_with_fallbacks():
     # 主模型（假设可能失败）
     primary_model = model
 
-    # 备用模型（更可靠或更便宜）
-    fallback_model = init_chat_model("groq:llama-3.1-8b-instant", api_key=GROQ_API_KEY)
+    # 备用模型（同千问）
+    fallback_model = ChatOpenAI(
+        model="qwen-turbo",
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        base_url=os.getenv("BASE_URL"),
+    )
 
     # 配置降级
     llm_with_fallbacks = primary_model.with_fallbacks([fallback_model])
@@ -440,7 +447,11 @@ def example_7_combined():
     structured_primary = model.with_structured_output(ExtractedData)
 
     # 2. 配置备用模型（也要先创建结构化输出）
-    fallback_model = init_chat_model("groq:llama-3.1-8b-instant", api_key=GROQ_API_KEY)
+    fallback_model = ChatOpenAI(
+        model="qwen-turbo",
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        base_url=os.getenv("BASE_URL"),
+    )
     structured_fallback = fallback_model.with_structured_output(ExtractedData)
 
     # 3. 添加重试（在结构化输出之后）

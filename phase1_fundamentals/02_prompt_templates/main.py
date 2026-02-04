@@ -16,7 +16,7 @@ LangChain 1.0 基础教程 - 提示词模板 (Prompt Templates)
 
 import os
 from dotenv import load_dotenv
-from langchain.chat_models import init_chat_model
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_core.prompts import (
     SystemMessagePromptTemplate,
@@ -29,16 +29,19 @@ from langchain_core.prompts import (
 # ============================================================================
 
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-if not GROQ_API_KEY or GROQ_API_KEY == "your_groq_api_key_here_replace_this":
+if not os.getenv("DASHSCOPE_API_KEY"):
     raise ValueError(
-        "\n请先在 .env 文件中设置有效的 GROQ_API_KEY\n"
-        "访问 https://console.groq.com/keys 获取免费密钥"
+        "\n请先在 .env 文件中设置有效的 DASHSCOPE_API_KEY 和 BASE_URL\n"
+        "千问 API 请参考 https://dashscope.aliyun.com/"
     )
 
-# 初始化模型
-model = init_chat_model("groq:llama-3.3-70b-versatile", api_key=GROQ_API_KEY)
+# 初始化模型（千问 API）
+model = ChatOpenAI(
+    model="qwen-turbo",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url=os.getenv("BASE_URL"),
+)
 
 
 # ============================================================================

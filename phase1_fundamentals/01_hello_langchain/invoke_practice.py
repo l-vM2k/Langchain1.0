@@ -8,18 +8,21 @@ invoke 方法深入实践 - 配合 README.md 学习
 
 import os
 from dotenv import load_dotenv
-from langchain.chat_models import init_chat_model
+from langchain_openai import ChatOpenAI
 
 # 加载环境变量
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-if not GROQ_API_KEY or GROQ_API_KEY == "your_groq_api_key_here_replace_this":
-    print("请先在 .env 文件中设置有效的 GROQ_API_KEY")
+if not os.getenv("DASHSCOPE_API_KEY"):
+    print("请先在 .env 文件中设置有效的 DASHSCOPE_API_KEY 和 BASE_URL")
     exit(1)
 
-# 初始化模型
-model = init_chat_model("groq:llama-3.3-70b-versatile", api_key=GROQ_API_KEY)
+# 初始化模型（千问 API）
+model = ChatOpenAI(
+    model="qwen-turbo",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url=os.getenv("BASE_URL"),
+)
 
 print("="*70)
 print(" invoke 方法深入实践")

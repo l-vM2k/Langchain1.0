@@ -8,7 +8,7 @@ LangChain 1.0 - RAG Basics 演示（非交互式）
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from langchain.chat_models import init_chat_model
+from langchain_openai import ChatOpenAI
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -25,18 +25,21 @@ DATA_DIR = SCRIPT_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 
-if not GROQ_API_KEY or GROQ_API_KEY == "your_groq_api_key_here_replace_this":
-    raise ValueError("请先设置 GROQ_API_KEY")
+if not os.getenv("DASHSCOPE_API_KEY"):
+    raise ValueError("请先设置 DASHSCOPE_API_KEY 和 BASE_URL")
 
 if not PINECONE_API_KEY or PINECONE_API_KEY == "your_pinecone_api_key_here":
     print("\n[警告] 未设置 PINECONE_API_KEY")
     print("Pinecone 相关示例将被跳过\n")
     PINECONE_API_KEY = None
 
-model = init_chat_model("groq:llama-3.3-70b-versatile", api_key=GROQ_API_KEY)
+model = ChatOpenAI(
+    model="qwen-turbo",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url=os.getenv("BASE_URL"),
+)
 
 
 def main():

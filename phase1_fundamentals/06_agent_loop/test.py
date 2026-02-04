@@ -10,17 +10,20 @@ parent_dir = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(parent_dir, '04_custom_tools', 'tools'))
 
 from dotenv import load_dotenv
-from langchain.chat_models import init_chat_model
+from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
 from calculator import calculator
 
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-if not GROQ_API_KEY or GROQ_API_KEY == "your_groq_api_key_here_replace_this":
-    raise ValueError("请先设置 GROQ_API_KEY")
+if not os.getenv("DASHSCOPE_API_KEY"):
+    raise ValueError("请先设置 DASHSCOPE_API_KEY 和 BASE_URL")
 
-model = init_chat_model("groq:llama-3.3-70b-versatile", api_key=GROQ_API_KEY)
+model = ChatOpenAI(
+    model="qwen-turbo",
+    api_key=os.getenv("DASHSCOPE_API_KEY"),
+    base_url=os.getenv("BASE_URL"),
+)
 
 print("=" * 70)
 print("测试：Agent 执行循环")

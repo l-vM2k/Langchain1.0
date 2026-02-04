@@ -16,7 +16,6 @@ LangChain 1.0 基础教程 - 第一个 LLM 调用
 import os
 from dotenv import load_dotenv
 from langchain.agents import create_agent
-from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_openai import ChatOpenAI
 
@@ -51,11 +50,11 @@ def example_1_simple_invoke():
     print("示例 1：最简单的 LLM 调用")
     print("="*70)
 
-    # 初始化模型
-    # 格式：init_chat_model("提供商:模型名称")
-    model = init_chat_model(
-        "qwen-turbo",  # Groq 提供的 Llama 3.3 模型
-        api_key=GROQ_API_KEY
+    # 初始化模型（千问 API）
+    model = ChatOpenAI(
+        model="qwen-turbo",
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        base_url=os.getenv("BASE_URL"),
     )
 
     #测试github
@@ -87,15 +86,16 @@ def example_2_messages():
     print("示例 2：使用消息列表构建对话")
     print("="*70)
 
-    model = init_chat_model(
-        "groq:llama-3.3-70b-versatile",
-        api_key=GROQ_API_KEY
+    model = ChatOpenAI(
+        model="qwen-turbo",
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        base_url=os.getenv("BASE_URL"),
     )
 
     # 构建消息列表
     messages = [
-        SystemMessage(content="你是一个友好的 Python 编程助手，擅长用简单易懂的方式解释编程概念。 回答字数不超过100字。"),
-        HumanMessage(content="什么是 Python 装饰器？ "),
+        SystemMessage(content="你是一个典型的傲娇少女：嘴上刻薄、毒舌，动不动就说“笨蛋”、“烦死了”、“谁要管你啊”，但实际上非常在意对方。每次说完狠话后，会偷偷做些暖心小事（比如递创可贴、默默帮忙）。说话带点小脾气，但行动很温柔。称呼用户为“笨蛋”或“喂”，但从不真的离开"),
+        HumanMessage(content="宝宝你喜欢我吗？"),
     ]
 
     print("系统提示:", messages[0].content)
@@ -108,7 +108,7 @@ def example_2_messages():
 
     # 继续对话：将 AI 的回复添加到对话历史
     messages.append(response)
-    messages.append(HumanMessage(content="能给我一个简单的例子吗？"))
+    messages.append(HumanMessage(content="你建议我晚上吃什么饭"))
 
     print("\n" + "-"*70)
     print("继续对话...")
@@ -134,9 +134,10 @@ def example_3_dict_messages():
     print("示例 3：使用字典格式的消息（推荐）")
     print("="*70)
 
-    model = init_chat_model(
-        "groq:llama-3.3-70b-versatile",
-        api_key=GROQ_API_KEY
+    model = ChatOpenAI(
+        model="qwen-turbo",
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        base_url=os.getenv("BASE_URL"),
     )
 
     # 使用字典格式构建消息
@@ -174,29 +175,33 @@ def example_4_model_parameters():
     print("="*70)
 
     # 创建一个温度较低的模型（更确定性）
-    model_deterministic = init_chat_model(
-        "groq:llama-3.3-70b-versatile",
-        api_key=GROQ_API_KEY,
+    model_deterministic = ChatOpenAI(
+        model="qwen-turbo",
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        base_url=os.getenv("BASE_URL"),
         temperature=0.0,  # 最确定性
         max_tokens=100    # 限制输出长度
     )
 
-    prompt = "写一个关于春天的句子。"
+    messages = [
+        {"role": "system", "content": "你是一个专业的医生"},
+        {"role": "user", "content": "医生你好，我感冒了"},
+    ]
 
-    print(f"提示词: {prompt}")
     print("\n使用 temperature=0.0 (确定性输出):")
 
     # 调用两次，观察输出的一致性
     for i in range(2):
-        response = model_deterministic.invoke(prompt)
+        response = model_deterministic.invoke(messages)
         print(f"  第 {i+1} 次: {response.content}")
 
     print("\n" + "-"*70)
 
     # 创建一个温度较高的模型（更随机）
-    model_creative = init_chat_model(
-        "groq:llama-3.3-70b-versatile",
-        api_key=GROQ_API_KEY,
+    model_creative = ChatOpenAI(
+        model="qwen-turbo",
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        base_url=os.getenv("BASE_URL"),
         temperature=1.5,  # 更有创造性
         max_tokens=100
     )
@@ -205,7 +210,7 @@ def example_4_model_parameters():
 
     # 调用两次，观察输出的差异
     for i in range(2):
-        response = model_creative.invoke(prompt)
+        response = model_creative.invoke(messages)
         print(f"  第 {i+1} 次: {response.content}")
 
 
@@ -226,9 +231,10 @@ def example_5_response_structure():
     print("示例 5：invoke 返回值详解")
     print("="*70)
 
-    model = init_chat_model(
-        "groq:llama-3.3-70b-versatile",
-        api_key=GROQ_API_KEY
+    model = ChatOpenAI(
+        model="qwen-turbo",
+        api_key=os.getenv("DASHSCOPE_API_KEY"),
+        base_url=os.getenv("BASE_URL"),
     )
 
     response = model.invoke("解释一下什么是递归？用一句话。")
@@ -270,9 +276,10 @@ def example_6_error_handling():
     print("="*70)
 
     try:
-        model = init_chat_model(
-            "groq:llama-3.3-70b-versatile",
-            api_key=GROQ_API_KEY
+        model = ChatOpenAI(
+            model="qwen-turbo",
+            api_key=os.getenv("DASHSCOPE_API_KEY"),
+            base_url=os.getenv("BASE_URL"),
         )
 
         response = model.invoke("Hello! How are you?")
@@ -368,8 +375,9 @@ def example_8_multiple_models():
 
     # Groq 上可用的不同模型
     models_to_test = [
-        "groq:llama-3.3-70b-versatile",
-        "groq:mixtral-8x7b-32768",
+        "qwen-max",
+        "qwen-turbo",
+        "qwen-long-latest"
     ]
 
     prompt = "用一句话解释什么是机器学习。"
@@ -380,10 +388,11 @@ def example_8_multiple_models():
             print(f"\n使用模型: {model_name}")
             print("-" * 70)
 
-            model = init_chat_model(
-                model_name,
-                api_key=GROQ_API_KEY,
-                temperature=0.7
+            model = ChatOpenAI(
+                model=model_name,
+                api_key=os.getenv("DASHSCOPE_API_KEY"),
+                base_url=os.getenv("BASE_URL"),
+                temperature=1.8
             )
 
             response = model.invoke(prompt)
@@ -397,16 +406,10 @@ def example_8_multiple_models():
 # 主程序
 # ============================================================================
 def main():
-    """
-    主程序：运行所有示例
-    """
-    print("\n" + "="*70)
-    print(" LangChain 1.0 基础教程 - 第一个 LLM 调用")
-    print("="*70)
 
     try:
         # 运行所有示例
-        example_1_simple_invoke()
+        # example_1_simple_invoke()
         # example_7_with_proxy()
         # example_2_messages()
         # example_3_dict_messages()
@@ -414,7 +417,7 @@ def main():
         # example_5_response_structure()
         # example_6_error_handling()
         # example_7_with_proxy()
-        # example_8_multiple_models()
+        example_8_multiple_models()
 
         # print("\n" + "="*70)
         # print(" 所有示例运行完成！")
