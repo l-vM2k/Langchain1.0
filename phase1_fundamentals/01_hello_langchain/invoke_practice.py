@@ -344,44 +344,62 @@ def exercise_6_chatbot():
     print("="*70)
 
 
+def history():
+    from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+    history = [
+        SystemMessage(content="你是一个 JSON 生成器"),
+        HumanMessage(content="把 {'name': 'Alice'} 转成 JSON 字符串"),
+        AIMessage(content='{"name": "Alice"}')  # ← 自动设 role="assistant"
+    ]
+
+    result = model.invoke(history)
+    history.append(AIMessage(content="给我加一个age字段吧，大概3岁") )
+    result2 = model.invoke(history)
+    print(result.content)
+
+    print(result2.content)
+
+
 # ============================================================================
 # 运行所有练习
 # ============================================================================
 def main():
     """运行所有练习"""
     try:
-        exercise_1_input_formats()
 
-        input("\n按 Enter 继续下一个练习...")
-        exercise_2_system_prompt()
+        history()
+        # exercise_1_input_formats()
+        #
+        # input("\n按 Enter 继续下一个练习...")
+        # exercise_2_system_prompt()
 
-        input("\n按 Enter 继续下一个练习...")
-        exercise_3_conversation()
+        # input("\n按 Enter 继续下一个练习...")
+        # exercise_3_conversation()
 
-        input("\n按 Enter 继续下一个练习...")
-        exercise_4_wrong_conversation()
-
-        input("\n按 Enter 继续下一个练习...")
-        exercise_5_response_structure()
-
-        input("\n按 Enter 继续下一个练习...")
-        exercise_6_chatbot()
-
-        print("\n" + "="*70)
-        print(" 🎉 所有练习完成！")
-        print("="*70)
-        print("\n你已经掌握了 invoke 方法的核心用法：")
-        print("  ✅ 三种输入格式")
-        print("  ✅ 系统提示的作用")
-        print("  ✅ 多轮对话的实现")
-        print("  ✅ 对话历史的管理")
-        print("  ✅ 返回值的解析")
-        print("  ✅ Token 使用统计")
-        print("\n建议：")
-        print("  1. 重新运行这个文件，仔细观察每个输出")
-        print("  2. 修改代码，尝试不同的系统提示")
-        print("  3. 阅读 README.md 的详细文档")
-        print("  4. 继续学习下一个模块：02_prompt_templates")
+        # input("\n按 Enter 继续下一个练习...")
+        # exercise_4_wrong_conversation()
+        #
+        # input("\n按 Enter 继续下一个练习...")
+        # exercise_5_response_structure()
+        #
+        # input("\n按 Enter 继续下一个练习...")
+        # exercise_6_chatbot()
+        #
+        # print("\n" + "="*70)
+        # print(" 🎉 所有练习完成！")
+        # print("="*70)
+        # print("\n你已经掌握了 invoke 方法的核心用法：")
+        # print("  ✅ 三种输入格式")
+        # print("  ✅ 系统提示的作用")
+        # print("  ✅ 多轮对话的实现")
+        # print("  ✅ 对话历史的管理")
+        # print("  ✅ 返回值的解析")
+        # print("  ✅ Token 使用统计")
+        # print("\n建议：")
+        # print("  1. 重新运行这个文件，仔细观察每个输出")
+        # print("  2. 修改代码，尝试不同的系统提示")
+        # print("  3. 阅读 README.md 的详细文档")
+        # print("  4. 继续学习下一个模块：02_prompt_templates")
 
     except KeyboardInterrupt:
         print("\n\n程序被用户中断")
