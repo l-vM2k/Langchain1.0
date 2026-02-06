@@ -409,7 +409,7 @@ def main():
 
     try:
         # 运行所有示例
-        # example_1_simple_invoke()
+        example_1_simple_invoke()
         # example_7_with_proxy()
         # example_2_messages()
         # example_3_dict_messages()
@@ -417,7 +417,7 @@ def main():
         # example_5_response_structure()
         # example_6_error_handling()
         # example_7_with_proxy()
-        example_8_multiple_models()
+        # example_8_multiple_models()
 
         # print("\n" + "="*70)
         # print(" 所有示例运行完成！")
