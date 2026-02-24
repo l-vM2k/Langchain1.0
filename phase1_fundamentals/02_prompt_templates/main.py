@@ -98,6 +98,18 @@ def example_1_why_templates():
     print("  4. 可测试 - 更容易编写测试用例")
 
 
+def prompt_use_test() :
+    template = PromptTemplate.from_template("你是一个{difficulty}级别的编程导师。请用简单易懂的语言解释{topic}, 不超过20个字。")
+    print(template.template)
+    print(template.input_variables)
+
+    prompt = template.format(difficulty="超级python大佬", topic="Python")
+    print(model.invoke(prompt).content)
+
+
+
+
+
 # ============================================================================
 # 示例 2：PromptTemplate 基础用法
 # ============================================================================
@@ -384,48 +396,50 @@ def example_9_lcel_chains():
 # 主程序
 # ============================================================================
 def main():
-    """运行所有示例"""
-    print("\n" + "="*70)
-    print(" LangChain 1.0 基础教程 - 提示词模板")
-    print("="*70)
-
+    # """运行所有示例"""
+    # print("\n" + "="*70)
+    # print(" LangChain 1.0 基础教程 - 提示词模板")
+    # print("="*70)
+    #
     try:
-        example_1_why_templates()
-        input("\n按 Enter 继续...")
 
-        example_2_prompt_template_basics()
-        input("\n按 Enter 继续...")
-
-        example_3_chat_prompt_template()
-        input("\n按 Enter 继续...")
-
-        example_4_conversation_template()
-        input("\n按 Enter 继续...")
-
-        example_5_message_templates()
-        input("\n按 Enter 继续...")
-
-        example_6_partial_variables()
-        input("\n按 Enter 继续...")
-
-
-
-        example_9_lcel_chains()
-
-        print("\n" + "="*70)
-        print(" 所有示例运行完成！")
-        print("="*70)
-        print("\n你已经学会了：")
-        print("  ✅ PromptTemplate 基础用法")
-        print("  ✅ ChatPromptTemplate 聊天模板")
-        print("  ✅ 多轮对话模板")
-        print("  ✅ 部分变量填充")
-        print("  ✅ 模板组合")
-        print("  ✅ 可复用模板库")
-        print("  ✅ LCEL 链式调用预览")
-        print("\n下一步学习：")
-        print("  - 03_messages: 深入理解消息类型")
-        print("  - 04_custom_tools: 创建自定义工具")
+        prompt_use_test()
+    #     example_1_why_templates()
+    #     input("\n按 Enter 继续...")
+    #
+    #     example_2_prompt_template_basics()
+    #     input("\n按 Enter 继续...")
+    #
+    #     example_3_chat_prompt_template()
+    #     input("\n按 Enter 继续...")
+    #
+    #     example_4_conversation_template()
+    #     input("\n按 Enter 继续...")
+    #
+    #     example_5_message_templates()
+    #     input("\n按 Enter 继续...")
+    #
+    #     example_6_partial_variables()
+    #     input("\n按 Enter 继续...")
+    #
+    #
+    #
+    #     example_9_lcel_chains()
+    #
+    #     print("\n" + "="*70)
+    #     print(" 所有示例运行完成！")
+    #     print("="*70)
+    #     print("\n你已经学会了：")
+    #     print("  ✅ PromptTemplate 基础用法")
+    #     print("  ✅ ChatPromptTemplate 聊天模板")
+    #     print("  ✅ 多轮对话模板")
+    #     print("  ✅ 部分变量填充")
+    #     print("  ✅ 模板组合")
+    #     print("  ✅ 可复用模板库")
+    #     print("  ✅ LCEL 链式调用预览")
+    #     print("\n下一步学习：")
+    #     print("  - 03_messages: 深入理解消息类型")
+    #     print("  - 04_custom_tools: 创建自定义工具")
 
     except KeyboardInterrupt:
         print("\n\n程序被用户中断")

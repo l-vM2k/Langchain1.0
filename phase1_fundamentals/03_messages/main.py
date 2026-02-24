@@ -261,15 +261,15 @@ def main():
         # input("\n按 Enter 继续...")
 
         example_5_simple_chatbot()
-
-        print("\n" + "="*70)
-        print(" 完成！")
-        print("="*70)
-        print("\n核心要点：")
-        print("  ✅ 推荐用字典格式，不用消息对象")
-        print("  ✅ 对话历史必须每次都传递完整的")
-        print("  ✅ 记得保存 AI 的回复到历史中")
-        print("  ✅ 历史太长时只保留最近几轮")
+        #
+        # print("\n" + "="*70)
+        # print(" 完成！")
+        # print("="*70)
+        # print("\n核心要点：")
+        # print("  ✅ 推荐用字典格式，不用消息对象")
+        # print("  ✅ 对话历史必须每次都传递完整的")
+        # print("  ✅ 记得保存 AI 的回复到历史中")
+        # print("  ✅ 历史太长时只保留最近几轮")
 
     except KeyboardInterrupt:
         print("\n\n程序中断")

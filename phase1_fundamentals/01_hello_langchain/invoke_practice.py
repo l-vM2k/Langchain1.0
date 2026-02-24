@@ -1,11 +1,3 @@
-"""
-invoke 方法深入实践 - 配合 README.md 学习
-==========================================
-
-本文件提供 invoke 方法的实战练习代码
-建议先阅读 README.md 中的 "invoke 方法 - 调用模型（深入详解）" 部分
-"""
-
 import os
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
